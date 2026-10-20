@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0b2a63">
+<title>لوحة إدارة موافقات التصوير | مدرسة البلاد القديم</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0b2a63;--blue:#0d47a1;--gold:#c9a227;--bg:#eef2f9;--card:#fff;--tx:#1c2434;--mut:#64708a;--bd:#e2e8f3;
+  --ok:#1b7a3a;--okbg:#e6f5ea;--no:#b3261e;--nobg:#fdecea;--wt:#8a6100;--wtbg:#fff4d6}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:'Cairo','Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--tx);font-size:14px;line-height:1.6}
+.hide{display:none!important}
+button{font:inherit;cursor:pointer}
+.btn{border:0;border-radius:10px;padding:8px 14px;background:var(--blue);color:#fff;font-weight:700;font-size:13px}
+.btn.sec{background:#fff;color:var(--blue);border:1.5px solid var(--blue)}
+.btn.sm{padding:3px 10px;font-size:12px;border-radius:8px}
+.btn.ghost{background:rgba(255,255,255,.15);color:#fff}
+.btn:disabled{opacity:.55;cursor:wait}
+input[type=text],input[type=password],select{width:100%;font:inherit;font-size:14px;padding:9px 11px;border:1.5px solid var(--bd);border-radius:10px;background:#fff;color:var(--tx);outline:none}
+input:focus,select:focus{border-color:var(--blue)}
+
+/* دخول */
+#login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(160deg,var(--navy),var(--blue))}
+.lbox{background:#fff;border-radius:22px;padding:26px;width:100%;max-width:360px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.lbox img{width:100%;border-radius:10px;margin-bottom:12px}
+.lbox h2{margin:0 0 4px;color:var(--navy);font-size:19px}
+.lbox p{margin:0 0 14px;color:var(--mut);font-size:13px}
+.lbox input{margin-bottom:10px;text-align:center;font-size:16px}
+.lbox .btn{width:100%;padding:11px;font-size:15px}
+.lerr{color:var(--no);margin-top:10px;font-size:13px;min-height:18px}
+
+/* رأس */
+header{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:20;border-bottom:3px solid var(--gold)}
+header h1{margin:0;font-size:16px;font-weight:800;flex:1;min-width:200px}
+header small{display:block;font-weight:400;opacity:.8;font-size:12px}
+.hbtns{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tog{font-size:12px;display:flex;align-items:center;gap:5px;opacity:.9}
+main{max-width:1250px;margin:0 auto;padding:14px}
+
+/* تبويب */
+.tabs{display:flex;gap:6px;margin-bottom:12px;overflow:auto}
+.tab{background:#fff;border:1.5px solid var(--bd);border-radius:12px;padding:8px 16px;font-weight:700;color:var(--mut);white-space:nowrap}
+.tab.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.badge{background:var(--no);color:#fff;border-radius:10px;padding:0 7px;font-size:11px;margin-right:4px}
+
+/* مؤشرات */
+.top{display:grid;grid-template-columns:260px 1fr;gap:12px;margin-bottom:12px}
+@media(max-width:800px){.top{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;box-shadow:0 2px 8px rgba(11,42,99,.05)}
+.donutwrap{display:flex;align-items:center;gap:14px;justify-content:center}
+.donut{width:120px;height:120px;border-radius:50%;position:relative;flex:none}
+.donut::after{content:attr(data-p);position:absolute;inset:14px;background:#fff;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:20px;color:var(--navy)}
+.legend div{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--mut)}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{border-radius:14px;padding:12px;text-align:center;background:#f6f8fd;border:1px solid var(--bd)}
+.kpi b{display:block;font-size:26px;line-height:1.2;color:var(--blue);font-weight:800}
+.kpi span{color:var(--mut);font-size:12.5px}
+.kpi.g b{color:var(--ok)}.kpi.r b{color:var(--no)}.kpi.y b{color:var(--wt)}
+
+/* فلاتر */
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.bar label{font-size:12.5px;display:flex;gap:4px;align-items:center}
+.sp{flex:1}
+
+/* جدول */
+.tbl{overflow:auto;max-height:65vh;border-radius:12px;border:1px solid var(--bd)}
+table{width:100%;border-collapse:collapse;background:#fff}
+th,td{padding:8px 10px;border-bottom:1px solid #eef1f7;text-align:right;white-space:nowrap}
+th{background:#37474f;color:#fff;position:sticky;top:0;z-index:2;font-size:12.5px}
+tr:hover td{background:#f7f9fe}
+.tag{padding:2px 10px;border-radius:12px;font-size:12px;font-weight:800}
+.t-ok{background:var(--okbg);color:var(--ok)}.t-no{background:var(--nobg);color:var(--no)}.t-w{background:var(--wtbg);color:var(--wt)}
+.mut{color:var(--mut)}
+
+/* شعب */
+.cls{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.cc h3{margin:0 0 6px;color:var(--navy);font-size:15px;display:flex;justify-content:space-between}
+.pb{height:9px;background:#e8edf6;border-radius:6px;overflow:hidden;display:flex;margin:6px 0}
+.pb i{display:block;height:100%}
+.nums{display:flex;gap:10px;font-size:12px;color:var(--mut);flex-wrap:wrap}
+.cc .acts{display:flex;gap:6px;margin-top:10px}
+
+.empty{padding:24px;text-align:center;color:var(--mut)}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#263238;color:#fff;padding:10px 18px;border-radius:12px;z-index:50;font-size:13px}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="lbox">
+    <img src="https://i.postimg.cc/K88X7RLb/trwysyh-dhhbyt.png" alt="">
+    <h2>🔒 لوحة إدارة موافقات التصوير</h2>
+    <p>أدخل رمز الدخول للمتابعة</p>
+    <input type="password" id="pin" placeholder="رمز الدخول" autocomplete="current-password">
+    <button class="btn" id="loginBtn">دخول</button>
+    <div class="lerr" id="lerr"></div>
+  </div>
+</div>
+
+<div id="app" class="hide">
+<header>
+  <h1>📊 موافقات التصوير – مدرسة البلاد القديم <small id="gen"></small></h1>
+  <div class="hbtns">
+    <label class="tog"><input type="checkbox" id="auto" checked> تحديث تلقائي</label>
+    <button class="btn ghost" id="refresh">🔄 تحديث</button>
+    <button class="btn ghost" id="logout">خروج</button>
+  </div>
+</header>
+
+<main>
+  <div class="top">
+    <div class="card donutwrap">
+      <div class="donut" id="donut" data-p="0%"></div>
+      <div class="legend">
+        <div><i style="background:var(--ok)"></i> أوافق <b id="lgOk"></b></div>
+        <div><i style="background:var(--no)"></i> لا أوافق <b id="lgNo"></b></div>
+        <div><i style="background:#e0c050"></i> لم يسجل <b id="lgLeft"></b></div>
+      </div>
+    </div>
+    <div class="kpis" id="kpis"></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" data-t="students">📋 الطلاب</button>
+    <button class="tab" data-t="classes">🏫 الشعب</button>
+    <button class="tab" data-t="alerts">⚠️ تنبيهات <span class="badge hide" id="alertBadge"></span></button>
+  </div>
+
+  <!-- الطلاب -->
+  <div id="p-students">
+    <div class="card">
+      <div class="filters">
+        <select id="fStage"></select>
+        <select id="fClass"></select>
+        <select id="fStatus">
+          <option value="all">كل الحالات</option>
+          <option value="none">لم يسجل</option>
+          <option value="done">سجّل (أي قرار)</option>
+          <option value="ok">أوافق</option>
+          <option value="no">لا أوافق</option>
+        </select>
+        <select id="fSource">
+          <option value="all">كل المصادر</option>
+          <option value="إلكتروني">إلكتروني</option>
+          <option value="ورقي">ورقي</option>
+        </select>
+        <input type="text" id="fQ" placeholder="🔍 بحث بالاسم / الهاتف / الرقم الشخصي">
+      </div>
+      <div class="bar">
+        <b id="count"></b>
+        <label><input type="checkbox" id="optPhone" checked> الهاتف</label>
+        <label><input type="checkbox" id="optSig"> عمود توقيع</label>
+        <span class="sp"></span>
+        <button class="btn" id="bPrint">🖨️ طباعة الكشف</button>
+        <button class="btn sec" id="bCsv">⬇️ CSV</button>
+        <button class="btn sec" id="bSlipsNamed">📄 استمارات للمتبقين</button>
+        <button class="btn sec" id="bSlipsBlank">📄 استمارات فارغة</button>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px;padding:8px"><div class="tbl"><table id="tbl"></table></div></div>
+  </div>
+
+  <!-- الشعب -->
+  <div id="p-classes" class="hide">
+    <div class="bar" style="margin:0 0 10px"><span class="sp"></span><button class="btn sec" id="bSummary">🖨️ طباعة ملخص الشعب</button></div>
+    <div class="cls" id="clsGrid"></div>
+  </div>
+
+  <!-- تنبيهات -->
+  <div id="p-alerts" class="hide">
+    <div class="card" style="margin-bottom:12px">
+      <b>استجابات لا تطابق أي طالب في القوائم</b>
+      <div class="tbl" style="margin-top:8px"><table id="unm"></table></div>
+    </div>
+    <div class="card">
+      <b>طلاب تكررت استجاباتهم (يُعتمد الأحدث)</b>
+      <div class="tbl" style="margin-top:8px"><table id="dups"></table></div>
+    </div>
+  </div>
+</main>
+</div>
+
+<div class="toast hide" id="toast"></div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbz2k4fRbhNuasq6Hwe60iLrlaYvrV3Igtu8opCsxEutW1vCsWEGqL93bhw_A593IsASMQ/exec";
+const HDR = 'https://i.postimg.cc/K88X7RLb/trwysyh-dhhbyt.png', STAMP = 'https://i.postimg.cc/x1zBrkqF/khtm-shfaf.jpg';
+const OKT = 'أوافق', NOT = 'لا أوافق';
+const $ = id => document.getElementById(id);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => String(s||'').replace(/[\u064B-\u065F\u0640]/g,'').replace(/[أإآٱ]/g,'ا').replace(/[يیى]/g,'ي').replace(/[کك]/g,'ك').replace(/\s+/g,' ').trim();
+const stageOf = c => c.replace(/\s*\d+$/,'');
+let PIN = '', DATA = null, VIEW = [], timer = null;
+
+function toast(m){ const t=$('toast'); t.textContent=m; t.classList.remove('hide'); setTimeout(()=>t.classList.add('hide'),2800); }
+
+async function api(body){
+  const ctl = new AbortController(); const t = setTimeout(()=>ctl.abort(), 40000);
+  try{
+    const r = await fetch(API, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(body), signal: ctl.signal});
+    const j = await r.json();
+    if(j.status !== 'ok') throw new Error(j.error || 'خطأ غير معروف');
+    return j;
+  }catch(e){
+    if(e.name === 'AbortError' || e.name === 'TypeError') throw new Error('تعذر الاتصال بالخادم، تحقق من الإنترنت');
+    throw e;
+  }finally{ clearTimeout(t); }
+}
+
+/* ---------- الدخول ---------- */
+async function login(){
+  PIN = $('pin').value; $('lerr').textContent = '';
+  if(!PIN) return;
+  $('loginBtn').disabled = true; $('loginBtn').textContent = 'جاري التحقق...';
+  try{ await load(true); sessionStorage.setItem('pin', PIN); }
+  catch(e){ $('lerr').textContent = e.message; }
+  finally{ $('loginBtn').disabled = false; $('loginBtn').textContent = 'دخول'; }
+}
+$('loginBtn').onclick = login;
+$('pin').addEventListener('keydown', e => { if(e.key === 'Enter') login(); });
+$('logout').onclick = () => { sessionStorage.removeItem('pin'); location.reload(); };
+$('refresh').onclick = () => load(false).then(()=>toast('تم التحديث')).catch(e=>toast(e.message));
+(function(){ const p = sessionStorage.getItem('pin'); if(p){ PIN = p; load(true).catch(()=>{ sessionStorage.removeItem('pin'); }); } })();
+
+async function load(first){
+  const j = await api({action:'data', pin:PIN});
+  DATA = j.data;
+  $('login').classList.add('hide'); $('app').classList.remove('hide');
+  $('gen').textContent = 'آخر تحديث: ' + DATA.generated;
+  if(first || !$('fStage').options.length) initFilters();
+  renderAll();
+  clearInterval(timer);
+  timer = setInterval(() => { if($('auto').checked && !document.hidden) load(false).catch(()=>{}); }, 60000);
+}
+
+/* ---------- فلاتر ---------- */
+function initFilters(){
+  const stages = [];
+  DATA.students.forEach(s => { const st = stageOf(s.cls); if(stages.indexOf(st) < 0) stages.push(st); });
+  $('fStage').innerHTML = '<option value="">كل المراحل</option>' + stages.map(s => `<option>${esc(s)}</option>`).join('');
+  fillClasses();
+}
+function fillClasses(){
+  const st = $('fStage').value, seen = [];
+  DATA.students.forEach(s => { if((!st || stageOf(s.cls) === st) && seen.indexOf(s.cls) < 0) seen.push(s.cls); });
+  const keep = $('fClass').value;
+  $('fClass').innerHTML = '<option value="">كل الشعب</option>' + seen.map(c => `<option>${esc(c)}</option>`).join('');
+  if(seen.indexOf(keep) >= 0) $('fClass').value = keep;
+}
+$('fStage').onchange = () => { fillClasses(); renderStudents(); };
+['fClass','fStatus','fSource'].forEach(id => $(id).onchange = renderStudents);
+$('fQ').oninput = renderStudents;
+
+/* ---------- إحصاء ---------- */
+function stat(list){
+  let ok=0, no=0, done=0;
+  list.forEach(s => { if(s.status === 'done'){ done++; if(s.decision === OKT) ok++; else if(s.decision === NOT) no++; } });
+  const t = list.length;
+  return {t, done, ok, no, left: t-done, pct: t ? Math.round(done*1000/t)/10 : 0};
+}
+
+function renderAll(){ renderKpis(); renderStudents(); renderClasses(); renderAlerts(); }
+
+function renderKpis(){
+  const k = stat(DATA.students);
+  const items = [['إجمالي المقيدين',k.t,''],['سجّلوا',k.done,''],['نسبة التسجيل',k.pct+'%',''],['أوافق',k.ok,'g'],['لا أوافق',k.no,'r'],['المتبقي',k.left,'y']];
+  $('kpis').innerHTML = items.map(i => `<div class="kpi ${i[2]}"><b>${i[1]}</b><span>${i[0]}</span></div>`).join('');
+  const pOk = k.t ? k.ok*100/k.t : 0, pNo = k.t ? k.no*100/k.t : 0;
+  $('donut').style.background = `conic-gradient(var(--ok) 0 ${pOk}%, var(--no) ${pOk}% ${pOk+pNo}%, #e0c050 ${pOk+pNo}% 100%)`;
+  $('donut').dataset.p = k.pct + '%';
+  $('lgOk').textContent = k.ok; $('lgNo').textContent = k.no; $('lgLeft').textContent = k.left;
+}
+
+function tag(s){
+  if(s.status !== 'done') return '<span class="tag t-w">لم يسجل</span>';
+  return s.decision === OKT ? '<span class="tag t-ok">أوافق</span>' : '<span class="tag t-no">لا أوافق</span>';
+}
+
+/* ---------- جدول الطلاب ---------- */
+function renderStudents(){
+  const st=$('fStage').value, cl=$('fClass').value, fs=$('fStatus').value, src=$('fSource').value, q=norm($('fQ').value);
+  VIEW = DATA.students.filter(s => {
+    if(st && stageOf(s.cls) !== st) return false;
+    if(cl && s.cls !== cl) return false;
+    if(fs === 'none' && s.status === 'done') return false;
+    if(fs === 'done' && s.status !== 'done') return false;
+    if(fs === 'ok' && s.decision !== OKT) return false;
+    if(fs === 'no' && s.decision !== NOT) return false;
+    if(src !== 'all' && s.source !== src) return false;
+    if(q && norm(s.name+' '+s.phone+' '+s.cpr+' '+s.parent).indexOf(q) < 0) return false;
+    return true;
+  });
+  $('count').textContent = 'العدد: ' + VIEW.length + ' طالب';
+  if(!VIEW.length){ $('tbl').innerHTML = '<tr><td class="empty">لا توجد نتائج</td></tr>'; return; }
+  let h = '<tr><th>#</th><th>الطالب</th><th>الصف</th><th>الحالة</th><th>المصدر</th><th>ولي الأمر</th><th>الهاتف</th><th>الرقم الشخصي</th><th>الوقت</th><th>تسجيل ورقي</th></tr>';
+  VIEW.slice(0,700).forEach((s,i) => {
+    const idx = DATA.students.indexOf(s);
+    h += `<tr><td>${i+1}</td><td><b>${esc(s.name)}</b>${s.count>1?` <span class="mut" title="تكررت الاستجابة">×${s.count}</span>`:''}</td><td>${esc(s.cls)}</td><td>${tag(s)}</td><td>${esc(s.source||'—')}</td><td>${esc(s.parent||'—')}</td><td>${esc(s.phone||'—')}</td><td>${esc(s.cpr||'—')}</td><td>${esc(s.time||'—')}</td>
+      <td><button class="btn sm" data-i="${idx}" data-d="${OKT}">أوافق</button> <button class="btn sm sec" data-i="${idx}" data-d="${NOT}">لا أوافق</button>${s.source==='ورقي'?` <button class="btn sm sec" data-i="${idx}" data-d="">إلغاء</button>`:''}</td></tr>`;
+  });
+  if(VIEW.length > 700) h += `<tr><td colspan="10" class="empty">يُعرض أول 700 فقط — استخدم الفلاتر</td></tr>`;
+  $('tbl').innerHTML = h;
+}
+$('tbl').addEventListener('click', async e => {
+  const b = e.target.closest('button[data-i]'); if(!b) return;
+  const s = DATA.students[+b.dataset.i], d = b.dataset.d;
+  if(!confirm(d ? `تسجيل «${d}» ورقياً للطالب:\n${s.name}` : `إلغاء التسجيل الورقي للطالب:\n${s.name}`)) return;
+  b.disabled = true;
+  try{ await api({action:'paper', pin:PIN, cls:s.cls, name:s.name, decision:d}); await load(false); toast('تم الحفظ'); }
+  catch(err){ toast(err.message); b.disabled = false; }
+});
+
+/* ---------- الشعب ---------- */
+function renderClasses(){
+  const g = {}, order = [];
+  DATA.students.forEach(s => { if(!g[s.cls]){ g[s.cls] = []; order.push(s.cls); } g[s.cls].push(s); });
+  $('clsGrid').innerHTML = order.map(c => {
+    const x = stat(g[c]), po = x.t ? x.ok*100/x.t : 0, pn = x.t ? x.no*100/x.t : 0;
+    return `<div class="card cc"><h3><span>${esc(c)}</span><span>${x.pct}%</span></h3>
+      <div class="pb"><i style="width:${po}%;background:var(--ok)"></i><i style="width:${pn}%;background:var(--no)"></i></div>
+      <div class="nums"><span>العدد ${x.t}</span><span style="color:var(--ok)">أوافق ${x.ok}</span><span style="color:var(--no)">لا أوافق ${x.no}</span><span style="color:var(--wt)">المتبقي ${x.left}</span></div>
+      <div class="acts"><button class="btn sm" data-show="${esc(c)}">عرض</button><button class="btn sm sec" data-slips="${esc(c)}">استمارات المتبقين</button><button class="btn sm sec" data-rep="${esc(c)}">كشف المتبقين</button></div></div>`;
+  }).join('');
+}
+$('clsGrid').addEventListener('click', e => {
+  const b = e.target.closest('button'); if(!b) return;
+  if(b.dataset.show){ $('fStage').value = stageOf(b.dataset.show); fillClasses(); $('fClass').value = b.dataset.show; $('fStatus').value = 'all'; renderStudents(); switchTab('students'); }
+  if(b.dataset.slips){ const l = DATA.students.filter(s => s.cls === b.dataset.slips && s.status !== 'done'); if(!l.length) return toast('لا يوجد متبقون'); slips(l.map(s => [s.name, s.cls])); }
+  if(b.dataset.rep){ const l = DATA.students.filter(s => s.cls === b.dataset.rep && s.status !== 'done'); if(!l.length) return toast('لا يوجد متبقون'); report(l, 'قائمة الطلاب الذين لم يسجلوا بعد', b.dataset.rep, true, true); }
+});
+
+/* ---------- تنبيهات ---------- */
+function renderAlerts(){
+  const u = DATA.unmatched, d = DATA.students.filter(s => s.count > 1);
+  $('unm').innerHTML = u.length ? '<tr><th>الوقت</th><th>الصف</th><th>الاسم</th><th>القرار</th></tr>' + u.map(x => `<tr><td>${esc(x.time)}</td><td>${esc(x.cls)}</td><td>${esc(x.name)}</td><td>${esc(x.decision)}</td></tr>`).join('') : '<tr><td class="empty">لا توجد ✅</td></tr>';
+  $('dups').innerHTML = d.length ? '<tr><th>الطالب</th><th>الصف</th><th>عدد الاستجابات</th><th>القرار المعتمد</th></tr>' + d.map(x => `<tr><td>${esc(x.name)}</td><td>${esc(x.cls)}</td><td>${x.count}</td><td>${esc(x.decision)}</td></tr>`).join('') : '<tr><td class="empty">لا توجد ✅</td></tr>';
+  const n = u.length;
+  $('alertBadge').textContent = n; $('alertBadge').classList.toggle('hide', !n);
+}
+
+/* ---------- التبويبات ---------- */
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.t === t));
+  ['students','classes','alerts'].forEach(x => $('p-'+x).classList.toggle('hide', x !== t));
+}
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => switchTab(b.dataset.t));
+
+/* ---------- طباعة ---------- */
+function openPrint(html){
+  const w = window.open('', '_blank');
+  if(!w){ toast('اسمح بالنوافذ المنبثقة ثم أعد المحاولة'); return; }
+  w.document.write(html); w.document.close();
+}
+function titleOf(){
+  return {all:'كشف المتابعة الشامل لموافقات التصوير', none:'قائمة الطلاب الذين لم يسجلوا بعد', done:'قائمة الطلاب الذين سجلوا', ok:'قائمة الطلاب الموافق على تصويرهم', no:'قائمة الطلاب غير الموافق على تصويرهم'}[$('fStatus').value];
+}
+function report(list, title, scope, phone, sig){
+  const rows = list.map((s,i) => `<tr><td>${i+1}</td><td>${esc(s.name)}</td><td>${esc(s.cls)}</td><td>${s.status==='done'?esc(s.decision):'لم يسجل'}</td>${phone?`<td>${esc(s.phone||'—')}</td>`:''}${sig?'<td style="width:130px"></td>':''}</tr>`).join('');
+  openPrint(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>تقرير</title><style>
+@page{size:A4 portrait;margin:10mm}body{font-family:Tahoma,Arial;margin:0;padding:10px;font-size:12px}
+.h{width:100%;max-height:45px;object-fit:contain}.t{text-align:center;color:#0d47a1;font-weight:bold;font-size:15px;margin:8px 0}
+.m{display:flex;justify-content:space-between;background:#f0f4f8;padding:6px 12px;border-radius:4px;margin-bottom:10px;font-weight:bold}
+table{width:100%;border-collapse:collapse}th,td{border:1px solid #333;padding:4px 7px;font-size:11px;text-align:right}
+th{background:#263238;color:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}thead{display:table-header-group}tr{page-break-inside:avoid}
+.f{display:flex;justify-content:space-between;margin-top:25px;font-weight:bold;font-size:11px}@media print{.np{display:none}}</style></head><body>
+<div class="np" style="text-align:center;margin-bottom:8px"><button onclick="print()">🖨️ طباعة</button></div>
+<img class="h" src="${HDR}"><div class="t">${esc(title)}</div>
+<div class="m"><div>النطاق: ${esc(scope)}</div><div>العدد: ${list.length} طالب</div><div>التاريخ: ${new Date().toLocaleDateString('ar-BH')}</div></div>
+<table><thead><tr><th>#</th><th>اسم الطالب</th><th>الصف</th><th>الموقف</th>${phone?'<th>هاتف ولي الأمر</th>':''}${sig?'<th>توقيع / ملاحظات</th>':''}</tr></thead><tbody>${rows}</tbody></table>
+<div class="f"><div>معلم المادة: أ. صبري محمد حمد</div><div>المدير المساعد: أ. عبدالله أحمد دليم</div><div>مدير المدرسة: أ. محمد إبراهيم ناصر</div></div></body></html>`);
+}
+$('bPrint').onclick = () => report(VIEW, titleOf(), $('fClass').value || $('fStage').value || 'المدرسة كاملة', $('optPhone').checked, $('optSig').checked);
+
+$('bSummary').onclick = () => {
+  const g = {}, order = [];
+  DATA.students.forEach(s => { if(!g[s.cls]){ g[s.cls] = []; order.push(s.cls); } g[s.cls].push(s); });
+  const k = stat(DATA.students);
+  const rows = order.map(c => { const x = stat(g[c]); return `<tr><td>${esc(c)}</td><td>${x.t}</td><td>${x.done}</td><td>${x.ok}</td><td>${x.no}</td><td>${x.left}</td><td>${x.pct}%</td></tr>`; }).join('');
+  openPrint(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>ملخص</title><style>
+@page{size:A4 portrait;margin:10mm}body{font-family:Tahoma,Arial;padding:10px;font-size:12px}.h{width:100%;max-height:45px;object-fit:contain}
+.t{text-align:center;color:#0d47a1;font-weight:bold;font-size:15px;margin:8px 0}table{width:100%;border-collapse:collapse}th,td{border:1px solid #333;padding:5px 8px;text-align:center}
+th{background:#263238;color:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}tfoot td{font-weight:bold;background:#eef2f9}@media print{.np{display:none}}</style></head><body>
+<div class="np" style="text-align:center"><button onclick="print()">🖨️ طباعة</button></div><img class="h" src="${HDR}"><div class="t">ملخص موافقات التصوير حسب الشعب — ${new Date().toLocaleDateString('ar-BH')}</div>
+<table><thead><tr><th>الشعبة</th><th>العدد</th><th>سجّل</th><th>أوافق</th><th>لا أوافق</th><th>المتبقي</th><th>النسبة</th></tr></thead><tbody>${rows}</tbody>
+<tfoot><tr><td>الإجمالي</td><td>${k.t}</td><td>${k.done}</td><td>${k.ok}</td><td>${k.no}</td><td>${k.left}</td><td>${k.pct}%</td></tr></tfoot></table></body></html>`);
+};
+
+$('bCsv').onclick = () => {
+  const q = v => '"' + String(v==null?'':v).replace(/"/g,'""') + '"';
+  const lines = [['الطالب','الصف','الحالة','القرار','المصدر','ولي الأمر','الهاتف','الرقم الشخصي','الوقت'].map(q).join(',')];
+  VIEW.forEach(s => lines.push([s.name,s.cls,s.status==='done'?'سجل':'لم يسجل',s.decision,s.source,s.parent,s.phone,s.cpr,s.time].map(q).join(',')));
+  const b = new Blob(['\uFEFF' + lines.join('\n')], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'موافقات-التصوير.csv'; a.click();
+};
+
+function slip(name, cls){
+  return `<div class="slip"><img src="${HDR}" class="sh">
+<div class="st">استمارة موافقة ولي الأمر على تصوير الطالب للعام الدراسي 2026 / 2027 م</div>
+<div class="sm"><div>اسم الطالب: ${name?`<b>${esc(name)}</b>`:'....................................................'}</div><div>الصف: ${cls?`<b>${esc(cls)}</b>`:'....................'}</div><div>الرقم الشخصي: ........................</div></div>
+<div class="sn">تحرص إدارة المدرسة على توثيق الأنشطة والفعاليات التربوية والتكريمات عبر الصور ومقاطع الفيديو ونشرها بالحسابات الرسمية. يرجى تحديد موقفكم الكريم:</div>
+<div class="sd"><div><span class="c"></span> أوافق على تصوير ابني في الأنشطة المدرسية</div><div><span class="c"></span> لا أوافق على التصوير</div></div>
+<div class="sf"><div><div>اسم ولي الأمر: ................................................</div><div>رقم الهاتف: ........................... التوقيع: ...........................</div></div>
+<img src="${STAMP}" class="stamp"><div style="text-align:left;line-height:1.25"><div>المدير المساعد: أ. عبدالله أحمد دليم</div><div>مدير المدرسة: أ. محمد إبراهيم ناصر</div></div></div></div>`;
+}
+function slips(list){
+  list = list.slice(); while(list.length % 4) list.push(['','']);
+  let pages = '';
+  for(let p = 0; p < list.length; p += 4) pages += '<div class="pp">' + list.slice(p, p+4).map(x => slip(x[0], x[1])).join('') + '</div>';
+  openPrint(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>استمارات</title><style>
+@page{size:A4 portrait;margin:6mm}*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}body{font-family:Tahoma,Arial;margin:0;padding:8px}
+.pp{display:grid;grid-template-rows:repeat(4,1fr);height:282mm;gap:3.5mm;page-break-after:always}
+.slip{border:1px dashed #666;border-radius:4px;padding:5px 12px;display:flex;flex-direction:column;justify-content:space-between;position:relative}
+.sh{width:100%;max-height:38px;object-fit:contain}.st{text-align:center;font-size:11.5px;font-weight:bold;color:#0d47a1;text-decoration:underline}
+.sm{display:grid;grid-template-columns:1.4fr .9fr 1fr;font-size:10.5px}.sn{font-size:9.5px;line-height:1.3;text-align:justify}
+.sd{display:flex;justify-content:space-around;background:#f8f9fa;padding:3px 6px;border:1px solid #ddd;border-radius:4px;font-size:10.5px;font-weight:bold}
+.c{display:inline-block;width:11px;height:11px;border:1.5px solid #222;margin-left:5px;vertical-align:middle}
+.sf{display:flex;justify-content:space-between;align-items:flex-end;font-size:9.5px}.stamp{width:46px;position:absolute;left:140px;bottom:1px;opacity:.85}
+@media print{.np{display:none}body{padding:0}}</style></head><body>
+<div class="np" style="text-align:center;margin-bottom:8px"><button onclick="print()">🖨️ طباعة</button></div>${pages}</body></html>`);
+}
+$('bSlipsNamed').onclick = () => { const l = VIEW.filter(s => s.status !== 'done'); if(!l.length) return toast('لا يوجد طلاب متبقون ضمن الفلتر'); slips(l.map(s => [s.name, s.cls])); };
+$('bSlipsBlank').onclick = () => { const n = parseInt(prompt('عدد الاستمارات الفارغة:', '28'), 10); if(!n) return; slips(Array.from({length:n}, () => ['',''])); };
+</script>
+</body>
+</html>
